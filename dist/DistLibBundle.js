@@ -17315,7 +17315,7 @@ class ListGridObject extends __WEBPACK_IMPORTED_MODULE_0__base_object_base_objec
 		exports["snapClinical"] = factory();
 	else
 		root["snapClinical"] = factory();
-})(typeof self !== 'undefined' ? self : this, function() {
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17386,7 +17386,75 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "user", function() { return user; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "processService", function() { return processService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "taskService", function() { return taskService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formService", function() { return formService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flowService", function() { return flowService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "snapClinicalApiService", function() { return snapClinicalApiService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "oauthService", function() { return oauthService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_User__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_TaskService__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_FormService__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_FlowService__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_OauthService__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utility_Version__ = __webpack_require__(19);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "client", function() { return __WEBPACK_IMPORTED_MODULE_0__Client__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return __WEBPACK_IMPORTED_MODULE_1__helpers_User__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ProcessService", function() { return __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TaskService", function() { return __WEBPACK_IMPORTED_MODULE_3__services_TaskService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FormService", function() { return __WEBPACK_IMPORTED_MODULE_4__services_FormService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FlowService", function() { return __WEBPACK_IMPORTED_MODULE_5__services_FlowService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SnapClinicalApiService", function() { return __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "OauthService", function() { return __WEBPACK_IMPORTED_MODULE_7__services_OauthService__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Version", function() { return __WEBPACK_IMPORTED_MODULE_8__utility_Version__["a"]; });
+
+
+
+
+
+
+
+
+
+
+/** @type {User} */
+const user = new __WEBPACK_IMPORTED_MODULE_1__helpers_User__["a" /* default */]();
+
+/** @type {ProcessService} */
+const processService = new __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__["a" /* default */]();
+
+/** @type {TaskService} */
+const taskService = new __WEBPACK_IMPORTED_MODULE_3__services_TaskService__["a" /* default */]();
+
+/** @type {FormService} */
+const formService = new __WEBPACK_IMPORTED_MODULE_4__services_FormService__["a" /* default */]();
+
+/** @type {FlowService} */
+const flowService = new __WEBPACK_IMPORTED_MODULE_5__services_FlowService__["a" /* default */]();
+
+/** @type {SnapClinicalApiService} */
+const snapClinicalApiService = new __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__["a" /* default */]();
+
+/** @type {OauthService} */
+const oauthService = new __WEBPACK_IMPORTED_MODULE_7__services_OauthService__["a" /* default */]();
+
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return client; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src__ = __webpack_require__(0);
+
+
+
 /**
  * Client is the base class that is used for setting system wide information about
  * connection, device, and general SDK settings.
@@ -17401,8 +17469,22 @@ class Client {
         this._config = {
             apiBaseUrl: undefined,
             basicCredentials: undefined,
+            tokenObj: undefined,
             personalId: undefined,
-            frontEndKey: undefined
+            frontEndKey: undefined,
+            oauthId: 'snapClinicalClient',
+            oauthPw: 'secret',
+            enableOauth: false,
+            contextPath: {
+                oauth: 'snap-oauth', // ':8081/snap-oauth'
+                snap: 'snap-api',// ':9090/snap-api',
+                flowable: 'flowable-task'//':9999/flow-api'
+            },
+            ports: {
+                oauth: '', //'8443',// '8081',
+                snap: '', //'8443',// '9090',
+                flowable: '' // '8443', //'9999'
+            }
         };
     }
 
@@ -17507,6 +17589,111 @@ class Client {
       this._config.frontEndKey = frontEndKey;
     }
 
+    /**
+     * Gets oauth
+     */
+    get enableOauth() {
+        return this._config.enableOauth;
+    }
+  
+    /**
+     * Enable/Disable oauth 
+     * @param {Boolean}value
+     */
+    set enableOauth(value) {
+        this._config.enableOauth = value;
+    }
+
+    /**
+     * Gets the token object
+     * containing access_token, token_type, refresh_token, expires_in, scope
+     * @type {Object} - current tokenObj
+     */
+    get tokenObj(){
+        return this._config.tokenObj
+    }
+
+    /**
+     * Sets the tokenObj
+     * 
+     * @param {Object} tokenObj
+     */
+    set tokenObj(tokenObj){
+        this._config.tokenObj = tokenObj
+    }
+
+    /**
+     * Gets the oauth id string
+     * 
+     * @type {String} - current oauthId
+     */
+    get oauthId() {
+        return this._config.oauthId;
+    }
+
+    /**
+     * Sets the oauth id
+     * 
+     * @param {String} oauthId
+     */
+    set oauthId(value) {
+        this._config.oauthId = value;
+    }
+
+    /**
+     * Gets the oauth password string
+     * 
+     * @type {String} - current oauthPw
+     */
+    get oauthPw() {
+        return this._config.oauthPw;
+    }
+
+    /**
+     * Sets the oauth password
+     * 
+     * @param {String} oauthPw
+     */
+    set oauthPw(value) {
+        this._config.oauthPw = value;
+    }
+
+    /**
+     * Gets the contextPath object
+     * containing oauth, snap, flowable context paths string
+     * @type {Object} - current contextPath
+     */
+    get contextPath(){
+        return this._config.contextPath
+    }
+
+    /**
+     * Sets the contextPath object containing oauth, snap and flowable context paths 
+     * 
+     * @param {Object} contextPath
+     */
+    set contextPath(contextPath){
+        this._config.contextPath = contextPath
+    }
+
+    /**
+     * Gets the ports object
+     * containing oauth, snap, flowable ports
+     * @type {Object} - current ports
+     */
+    get ports(){
+        return this._config.ports
+    }
+
+    /**
+     * Sets the ports object containing oauth, snap and flowable ports
+     * 
+     * @param {Object} ports
+     */
+    set ports(ports){
+        this._config.ports = ports
+    }
+
   /**
      * Send HTTP request to API
      *
@@ -17522,7 +17709,6 @@ class Client {
      * @return {Promise}          - Resolves on HTTP 200. Rejects on all else.
      */
     async fetch(url, method = 'GET', params = {}, body = undefined, headers) {
-
         // Determine if method is valid
         if ((['POST', 'PUT', 'PATCH'].indexOf(method.toUpperCase()) !== -1) && !body) {
             throw new Error('fetch error: invalid PUT/POST/PATCH request, no data given');
@@ -17544,9 +17730,23 @@ class Client {
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json'
             };
-        // Add the Basic Authentication header
-        if (this._config.basicCredentials)
-            fetchHeaders['Authorization'] = 'Basic '+ this._config.basicCredentials;
+
+        if (this._config.enableOauth) {
+            if (!this._config.tokenObj) {
+                // get a valid token if it doesn't exist
+                if (__WEBPACK_IMPORTED_MODULE_0__src__["user"]._accountName && __WEBPACK_IMPORTED_MODULE_0__src__["user"]._password) {
+                    await this.getToken(__WEBPACK_IMPORTED_MODULE_0__src__["user"]._accountName, __WEBPACK_IMPORTED_MODULE_0__src__["user"]._password);
+                    fetchHeaders['Authorization'] = 'Bearer '+ this._config.tokenObj.access_token; 
+                }
+            } else {
+                // Add the Bearer Authentication header
+                fetchHeaders['Authorization'] = 'Bearer '+ this._config.tokenObj.access_token;
+            }
+        } else {
+            // Add the Basic Authentication header
+            if (this._config.basicCredentials)
+                fetchHeaders['Authorization'] = 'Basic '+ this._config.basicCredentials;
+        }   
 
         let requestData = {
             method: method,
@@ -17556,21 +17756,66 @@ class Client {
             body: body
         };
 
-        const fetchUrl = this._config.apiBaseUrl + url +
+        let ports = '';
+        if (url.indexOf(`/${this._config.contextPath.oauth}/`) > -1 && this._config.ports.oauth)
+            ports = `${this._config.ports.oauth}`;
+        else if (url.indexOf(`/${this._config.contextPath.flowable}`) > -1 && this._config.ports.flowable)
+            ports = `${this._config.ports.flowable}`;
+        else if (url.indexOf(`/${this._config.contextPath.snap}`) > -1 && this._config.ports.snap)
+            ports = `${this._config.ports.snap}`;
+
+        const fetchUrl = this._config.apiBaseUrl + ports + url +
             (fetchParamsString.length > 0 ? '?' + fetchParamsString : '');
 
         let fetchRequest = new Request(fetchUrl, requestData);
 
+        if (this._config.enableOauth){
+            // use oauth 
+            const response = await fetch(fetchRequest)
+            const responseStatus = response.status || 0;
+
+            if (responseStatus === 401 && this._config.tokenObj){
+                // in case token expired try to refresh it
+                const json = await response.json();
+                const tokenExpiredMsg = "Access token expired: " + this._config.tokenObj.access_token;
+                if (json.error === 'invalid_token' && json.error_description === tokenExpiredMsg){
+                    return await this.tokenOnExpired(fetchUrl, requestData)
+                }
+            } else {
+                return response;
+            } 
+        } else {
+            return fetch(fetchRequest);
+        }
+    }
+
+    /**
+     * get a valid token
+     * @param {*} username 
+     * @param {*} password 
+     */
+    async getToken(username, password){
+        // refresh the token
+        try {
+            await __WEBPACK_IMPORTED_MODULE_0__src__["oauthService"].getToken(username, password);
+        } catch (e) {
+            throw(e);
+        }
+    }
+
+    /**
+     * refresh the token and fetch again
+     * @param {*} fetchUrl 
+     * @param {*} requestData 
+     */
+    async tokenOnExpired(fetchUrl, requestData){
+        // refresh the token
+        let res = await __WEBPACK_IMPORTED_MODULE_0__src__["oauthService"].refreshToken(this._config.tokenObj.refresh_token)
+        // set the new token
+        requestData.headers.set("Authorization", 'Bearer '+ this._config.tokenObj.access_token)
+        let fetchRequest = new Request(fetchUrl, requestData)
+        // refetch the request
         return fetch(fetchRequest);
-            // .then( response => response);
-            // .then( response => {
-            //     // if (response.body) console.log(response.body)
-            //     return response.json();
-            // })
-            // .then(json => {
-            //     console.log('fetch reply', json);
-            //     return json;
-            // } );
     }
 
 }
@@ -17578,63 +17823,6 @@ class Client {
 const client = new Client();
 
 // export default Client;
-
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "user", function() { return user; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "processService", function() { return processService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "taskService", function() { return taskService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formService", function() { return formService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flowService", function() { return flowService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "snapClinicalApiService", function() { return snapClinicalApiService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helpers_User__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_TaskService__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_FormService__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_FlowService__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utility_Version__ = __webpack_require__(18);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "client", function() { return __WEBPACK_IMPORTED_MODULE_0__Client__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return __WEBPACK_IMPORTED_MODULE_1__helpers_User__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "ProcessService", function() { return __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "TaskService", function() { return __WEBPACK_IMPORTED_MODULE_3__services_TaskService__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FormService", function() { return __WEBPACK_IMPORTED_MODULE_4__services_FormService__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "FlowService", function() { return __WEBPACK_IMPORTED_MODULE_5__services_FlowService__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "SnapClinicalApiService", function() { return __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Version", function() { return __WEBPACK_IMPORTED_MODULE_7__utility_Version__["a"]; });
-
-
-
-
-
-
-
-
-
-/** @type {User} */
-const user = new __WEBPACK_IMPORTED_MODULE_1__helpers_User__["a" /* default */]();
-
-/** @type {ProcessService} */
-const processService = new __WEBPACK_IMPORTED_MODULE_2__services_ProcessService__["a" /* default */]();
-
-/** @type {TaskService} */
-const taskService = new __WEBPACK_IMPORTED_MODULE_3__services_TaskService__["a" /* default */]();
-
-/** @type {FormService} */
-const formService = new __WEBPACK_IMPORTED_MODULE_4__services_FormService__["a" /* default */]();
-
-/** @type {FlowService} */
-const flowService = new __WEBPACK_IMPORTED_MODULE_5__services_FlowService__["a" /* default */]();
-
-/** @type {SnapClinicalApiService} */
-const snapClinicalApiService = new __WEBPACK_IMPORTED_MODULE_6__services_SnapClinicalApiService__["a" /* default */]();
 
 
 
@@ -17698,7 +17886,7 @@ class BaseModel {
 /* unused harmony export isValid */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return validate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return hasPersonalId; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
 
 
 /**
@@ -17892,7 +18080,7 @@ class FormModel extends __WEBPACK_IMPORTED_MODULE_0__Form__["a" /* default */] {
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(1);
+module.exports = __webpack_require__(0);
 
 
 /***/ }),
@@ -17901,7 +18089,9 @@ module.exports = __webpack_require__(1);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_User__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Client__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src__ = __webpack_require__(0);
+
 
 
 
@@ -17919,7 +18109,7 @@ class User extends __WEBPACK_IMPORTED_MODULE_0__models_User__["a" /* default */]
     constructor(json = {}) {
         super(json);
 
-        this.updateCredentials();
+        this.updateAuthenticatedUser();
     }
 
     /**
@@ -17941,12 +18131,31 @@ class User extends __WEBPACK_IMPORTED_MODULE_0__models_User__["a" /* default */]
     set password(pwd) {
         super.password = pwd;
 
-        this.updateCredentials();
+        this.updateAuthenticatedUser();
+    }
+
+    /**
+     * User Authentication based on client configuration
+     */
+    updateAuthenticatedUser() {
+        if (__WEBPACK_IMPORTED_MODULE_1__Client__["a" /* client */].enableOauth)
+            this.resetToken();
+        else
+            this.updateCredentials();
     }
 
     updateCredentials() {
         if (this._accountName && this._password) {
             __WEBPACK_IMPORTED_MODULE_1__Client__["a" /* client */].basicCredentials = window.btoa(this._accountName + ':' + this._password);
+        }
+    }
+
+    /**
+     * reset token if user has new credentials 
+     */
+    resetToken(){
+        if (this._accountName && this._password) {
+            __WEBPACK_IMPORTED_MODULE_1__Client__["a" /* client */].tokenObj = null;
         }
     }
 
@@ -18071,8 +18280,8 @@ class UserModel extends __WEBPACK_IMPORTED_MODULE_0__Base__["a" /* default */]{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utility_ValidationUtility__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_ProcessDefinition__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_ProcessInstance__ = __webpack_require__(11);
@@ -18116,7 +18325,7 @@ class ProcessService {
             order : 'desc'
         };
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/repository/process-definitions', 'GET', params)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/repository/process-definitions`, 'GET', params)
             .then( resp => resp.json() )
             .then( response => {
                 // Return the top most project definition process definition
@@ -18158,7 +18367,7 @@ class ProcessService {
                 ]
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/query/process-instances', 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/query/process-instances`, 'POST', null, body)
             .then( resp => resp.json() )
             .then( response => {
                 // console.log('queryLastProcessInstances - response:', response);
@@ -18206,7 +18415,7 @@ class ProcessService {
             ]
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/runtime/process-instances', 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/runtime/process-instances`, 'POST', null, body)
             .then( resp => resp.json() )
             .then( response => {
                 console.log('startNewProcessInstance - response:', response);
@@ -18265,7 +18474,7 @@ class ProcessService {
             'variables': variables
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/query/historic-process-instances', 'POST', params, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/query/historic-process-instances`, 'POST', params, body)
             .then( resp => resp.json() )
             .then( response => {
                 // console.log('queryHistoricProcessInstances - response:', response);
@@ -18318,7 +18527,7 @@ class ProcessService {
         }
         const body = JSON.stringify(variables);
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/flowable-task/process-api/runtime/process-instances/${procInstID}/variables`, 'PUT', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/runtime/process-instances/${procInstID}/variables`, 'PUT', null, body)
             .then( response => {
                 // console.log('saveProcessVariable:', response);
                 if (response.status === 201) { // 201 Created
@@ -18399,7 +18608,7 @@ class ProcessInstanceModel extends __WEBPACK_IMPORTED_MODULE_0__Base__["a" /* de
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Task__ = __webpack_require__(13);
 
@@ -18431,7 +18640,7 @@ class TaskService {
             includeProcessVariables : true
         };
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/runtime/tasks', 'GET', params)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/runtime/tasks`, 'GET', params)
             .then( resp => resp.json() )
             .then( response => {
                 // console.log('getTask - response:', response);
@@ -18462,7 +18671,7 @@ class TaskService {
         });
 
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/runtime/tasks/' + taskId.toString(), 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/runtime/tasks/` + taskId.toString(), 'POST', null, body)
             .then( response => {
 
                 // console.log('Task action - response:', response);
@@ -18544,12 +18753,12 @@ class TaskModel extends __WEBPACK_IMPORTED_MODULE_0__Base__["a" /* default */] {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Form__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_FormModel__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_Base__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__index__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__index__ = __webpack_require__(0);
 
 
 
@@ -18583,7 +18792,7 @@ class FormService {
             taskId : taskId
         };
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/process-api/form/form-data', 'GET', params)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/form/form-data`, 'GET', params)
             .then( resp => resp.json() )
             .then( response => {
                 // Return the top most project definition process definition
@@ -18607,7 +18816,7 @@ class FormService {
             Object(__WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__["e" /* isRequired */])({deploymentId, formKey})
         );
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/flowable-task/process-api/repository/deployments/${deploymentId}/resourcedata/form-${formKey}.form`, 'GET')
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/process-api/repository/deployments/${deploymentId}/resourcedata/form-${formKey}.form`, 'GET')
             .then( resp => resp.json() )
             .then( response => {
                 // Return the top most project definition process definition
@@ -18639,7 +18848,7 @@ class FormService {
           'formDefinitionKey': formKey
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/flowable-task/form-api/form/form-instance-model`, 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/form-api/form/form-instance-model`, 'POST', null, body)
         .then( resp => resp.json() )
         .then( response => {
           // Return the form model
@@ -18667,7 +18876,7 @@ class FormService {
             'formInstanceId': formInstanceId
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/flowable-task/form-api/form/form-instance-model`, 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/form-api/form/form-instance-model`, 'POST', null, body)
             .then( resp => resp.json() )
             .then( response => {
                 // Return the form model
@@ -18695,7 +18904,7 @@ class FormService {
             'processInstanceId': processInstanceId
         });
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/flowable-task/form-api/query/form-instances?size=9999`, 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/form-api/query/form-instances?size=9999`, 'POST', null, body)
         .then( resp => resp.json() )
         .then( response => {
             // Return an array of form instances
@@ -18765,7 +18974,7 @@ class FormService {
         const body = JSON.stringify(bodyObj);
 
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/form-api/form/form-instances', 'POST', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/form-api/form/form-instances`, 'POST', null, body)
             .then( response => {
                 if (response.status === 201 || response.status === 200) { // 201 Created
                     return true;
@@ -18811,7 +19020,7 @@ class FormService {
         if (processInstanceId) bodyObj['processInstanceId'] = processInstanceId;
         const body = JSON.stringify(bodyObj);
 
-        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch('/flowable-task/form-api/form/form-instances', 'PUT', null, body)
+        return __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/form-api/form/form-instances`, 'PUT', null, body)
             .then( response => {
                 if (response.status === 200 || response.status === 204) { // 204 No Content
                     return true;
@@ -18870,11 +19079,11 @@ class FormService {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utility_ArrayUtility__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_FormModel__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__index__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__index__ = __webpack_require__(0);
 
 
 
@@ -19423,7 +19632,7 @@ function arrayToObject(_array, options = undefined) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__ = __webpack_require__(3);
 
 
@@ -19493,7 +19702,7 @@ class SnapClinicalApiService {
 
     const body = JSON.stringify(processData);
 
-    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch("/flowable-task/snap-api/get-new-or-resume-process", "POST", null, body);
+    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/snap-api/get-new-or-resume-process`, "POST", null, body);
 
     if (response.status === 200) { // 200 OK
       return response.json();
@@ -19548,7 +19757,7 @@ class SnapClinicalApiService {
 
     const body = JSON.stringify(taskData);
 
-    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch("/flowable-task/snap-api/complete-and-get-next", "POST", null, body);
+    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/snap-api/complete-and-get-next`, "POST", null, body);
 
     if (response.status === 200) { // 200 OK
         return response.json();
@@ -19618,7 +19827,7 @@ class SnapClinicalApiService {
 
     const body = JSON.stringify(actionData);
 
-    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch("/flowable-task/snap-api/task-action", "POST", null, body);
+    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/snap-api/task-action`, "POST", null, body);
 
     if (response.status === 200) { // 200 OK
       return response.json();
@@ -19683,7 +19892,7 @@ class SnapClinicalApiService {
 
     const body = JSON.stringify(lookupData);
 
-    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch("/flowable-task/snap-api/get-tasks", "POST", null, body);
+    let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.flowable}/snap-api/get-tasks`, "POST", null, body);
 
     if (response.status === 200) { // 200 OK
       return response.json();
@@ -19703,6 +19912,109 @@ class SnapClinicalApiService {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__ = __webpack_require__(3);
+
+
+
+/**
+ *  Service for hanlding token based authiencation
+ */
+class OauthService {
+    constructor(){ }
+
+    /**
+     * get the access token by passing in the username and password
+     * each token as 1 hour expiration
+     * @param {*} username  
+     * @param {*} password 
+     */
+    async getToken(username, password){
+        Object(__WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__["f" /* validate */])( this.constructor.name + '.getToken', Object(__WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__["e" /* isRequired */])({username, password}));
+        const fetchHeaders = {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization': `Basic ${btoa(`${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].oauthId}:${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].oauthPw}`)}`
+        };
+
+        const requestData = {
+            method: "POST",
+            headers: new Headers(fetchHeaders),
+            mode: 'cors',
+            cache: 'default',
+            body: {}
+        };
+
+        const params = {
+            client_id: 'snapClinicalClient',
+            grant_type: 'password',
+            username,
+            password,
+        }
+
+        let fetchParams = new URLSearchParams();
+        for (let key in params) {
+            fetchParams.append(key, params[key]);
+        }
+        const fetchParamsString = fetchParams.toString();
+
+        let url = `/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.oauth}/oauth/token`;
+        let ports = '';
+        if (url.indexOf(__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.oauth) > -1 && __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].ports.oauth)
+            ports = `${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].ports.oauth}`;
+
+        const fetchUrl = __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].apiBaseUrl + ports + url +  (fetchParamsString.length > 0 ? '?' + fetchParamsString : '');
+        const fetchRequest = new Request(fetchUrl, requestData); 
+
+        let response = await fetch(fetchRequest);
+
+        if (response.status === 200) { // 200 OK
+            let json = await response.json();
+            __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].tokenObj = json;
+            return json;
+        }
+        else {
+            let json = await response.json();
+            throw new Error("getToken failed,\nerror message: " + json.message);
+        }
+    }
+    /**
+     * refresh the token once expired
+     * @param {*} refresh_token 
+     */
+    async refreshToken(refresh_token){
+        Object(__WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__["f" /* validate */])( this.constructor.name + '.refreshToken', Object(__WEBPACK_IMPORTED_MODULE_1__utility_ValidationUtility__["e" /* isRequired */])({refresh_token}));
+
+        const params = {
+            refresh_token: refresh_token,
+            grant_type: "refresh_token"
+        }
+
+        const fetchHeaders = {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization': `Basic ${btoa(`${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].oauthId}:${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].oauthPw}`)}`
+        };
+
+        let response = await __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].fetch(`/${__WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].contextPath.oauth}/oauth/token`, "POST", params,  {}, fetchHeaders);
+        if (response.status === 200) { // 200 OK
+            let json = await response.json();
+            __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* client */].tokenObj = json;
+            return json;
+        }
+        else {
+            let json = await response.json();
+            throw new Error("refreshToken failed,\nerror message: " + json.message);
+        }
+    }
+}
+/* harmony default export */ __webpack_exports__["a"] = (OauthService);
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /**
  * Print current lib version on the console log
  */
@@ -19711,7 +20023,7 @@ class Version {
      * Prints the current lib version on the console log
      */
     static print() {
-        console.log("snapClinical JS SDK Version: " + "1.1.0" );
+        console.log("snapClinical JS SDK Version: " + "1.2.1" );
     }
 
     /**
@@ -19719,7 +20031,7 @@ class Version {
      * @return (String)     - the current js sdk library version
      */
     static get() {
-        return ("snapClinical JS SDK Version: " + "1.1.0" );
+        return ("snapClinical JS SDK Version: " + "1.2.1" );
     }
 
 }
