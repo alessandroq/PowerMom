@@ -1,4 +1,4 @@
-/* UUID: 725435-32672-24945-943156- */ 
+/* UUID: 481754-815613-146048-655858- */ 
 
 html {
     margin: auto;
@@ -191,6 +191,7 @@ input, textarea, select {
 .element.fc.Textbox .textView {
   width: 100%;
   height: 100%;
+  resize: none;
   padding-left: 5px;
 }
 
